@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <iomanip>
+#include <ctime>
 
 
 using namespace std ;
@@ -11,26 +12,27 @@ using namespace std ;
 void ls(char bf[])
 {
 
-	DIR *mydir ;
-	struct dirent *myfile ;
+	DIR *dir ;
+	struct dirent *file ;
 	struct stat mystat ;
 
 	char buf[512] ;
+	char lastmodtime[100] ;
 
-	mydir = opendir(bf) ;
-	string s ;
+	dir = opendir(bf) ;
 	
 
-	while((myfile = readdir(mydir)) != NULL)
+	while((file = readdir(dir)) != NULL)
 	{
-		sprintf(buf, "%s/%s", bf, myfile->d_name);
-		cout<<setw(50)<<left<<myfile->d_name ;
-
-		s = myfile->d_name ;
-
+		sprintf(buf, "%s/%s", bf, file->d_name);
 		stat(buf, &mystat) ;
+		strftime(lastmodtime, 50, "%b %d %H:%M", localtime(&mystat.st_mtime));
 
-		cout<<setw(50)<<left<<mystat.st_size<<endl ;
+		cout<<setw(50)<<left<<file->d_name ;
+		cout<<setw(50)<<left<<mystat.st_size ;
+		cout<<setw(50)<<left<< lastmodtime <<endl ;
+
+
 		cout<<endl ;
 
 	}
