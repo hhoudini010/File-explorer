@@ -7,17 +7,21 @@
 #include <ctime>
 #include <pwd.h>
 #include <grp.h>
+#include <vector>
 
 
 using namespace std ;
 
-int ls(char bf[])
+int ls(char bf[], vector<string> &vec)
 {
+	vec.erase(vec.begin(), vec.end()) ;
 
 	DIR *dir ;
 	struct dirent *file ;
 	struct stat mystat ;
 	int nlines = 0 ;
+
+
 
 	char buf[512] ;
 	char lastmodtime[100] ;
@@ -59,6 +63,7 @@ int ls(char bf[])
 		cout<<setw(27)<<left<<gn->gr_name ;
 
 		cout<<setw(27)<<left<<file->d_name ;
+		vec.push_back(file->d_name) ;
 		if(siz < 1000)
 			cout<<setw(4)<<right<<siz<<setw(27)<<left<<"B" ;
 		else if(siz > 1000 && siz < 100000)
@@ -66,10 +71,12 @@ int ls(char bf[])
 		else if(siz >100000 && siz < 100000000 )
 			cout<<setw(4)<<right<<setprecision(3)<<(float)siz/1000000<<setw(27)<<left<<"M" ;
 		cout<<setw(27)<<left<< lastmodtime <<endl ;
+		
 
 		nlines++ ;
 
 	}
+	closedir(dir) ;
 
 	return nlines ;
 }
