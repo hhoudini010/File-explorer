@@ -11,12 +11,13 @@
 
 using namespace std ;
 
-void ls(char bf[])
+int ls(char bf[])
 {
 
 	DIR *dir ;
 	struct dirent *file ;
 	struct stat mystat ;
+	int nlines = 0 ;
 
 	char buf[512] ;
 	char lastmodtime[100] ;
@@ -31,11 +32,11 @@ void ls(char bf[])
 		stat(buf, &mystat) ;
 		strftime(lastmodtime, 50, "%b %d %H:%M", localtime(&mystat.st_mtime)); // get last modified time in required format.
 
-		struct passwd *un = getpwuid(mystat.st_uid); //To get user name
-		struct group  *gn = getgrgid(mystat.st_gid); //To get group name
+		struct passwd *un = getpwuid(mystat.st_uid); //To get user name.
+		struct group  *gn = getgrgid(mystat.st_gid); //To get group name.
 
 
-		siz = mystat.st_size ;
+		siz = mystat.st_size ; //siz stores size of file/directory in bytes.
 
 		
 
@@ -66,14 +67,10 @@ void ls(char bf[])
 			cout<<setw(4)<<right<<setprecision(3)<<(float)siz/1000000<<setw(27)<<left<<"M" ;
 		cout<<setw(27)<<left<< lastmodtime <<endl ;
 
-
-
-		
-
-		
-
-
+		nlines++ ;
 
 	}
+
+	return nlines ;
 }
 	
