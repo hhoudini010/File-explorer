@@ -7,10 +7,11 @@
 #include "ls.h"
 
 #define clear() printf("\033[H\033[J") //Clears the screen.
-char path[60000] = "/Users/sandeepkumargupta/Desktop" ;
 
 
 using namespace std ;
+string path = "/Users/sandeepkumargupta/Desktop" ;
+
 
 vector <string> vec, forward, backward ; //vec for storing file names in current directory.
 
@@ -23,10 +24,12 @@ int main(int argc, char const *argv[])
 	int nlines ;	   // Stores number of files/directories in a directory.
 	int counter = 0 ;  // counter to help in cursor movement.
 
+	string curdir = "Desktop" ; // To print current directory
 	struct termios tio ;
 	
 
-	char tempfiln[300] ;
+	char tempfiln[7000] ;
+	strcpy(tempfiln,path.c_str()) ;
 	char c ;
 
 	tcgetattr(fileno(stdin), &tio) ;	
@@ -39,17 +42,23 @@ int main(int argc, char const *argv[])
 	tcsetattr(fileno(stdout), TCSANOW, &tio) ; // Shifting to Non-canonical.
 
 
+	string s ;
 
 	label : clear() ;
-	nlines = ls(path, vec) ;
+	cout<<curdir<<endl ;
+	nlines = ls(tempfiln, vec) ;
 	struct stat me ;
 	if(nlines != 0){
 	nlines-- ;
+
+
 	counter = 0 ;
 
-	printf("\033[490A");
+	
 
-	int flag = 0 ;
+
+	printf("\033[%dA", nlines+1);
+
 
 	while((c = getchar()) != 'q')		// Quit application on kbhit q ;
 	{
@@ -81,11 +90,30 @@ int main(int argc, char const *argv[])
 
 		if(c == '\n')									//Enter key pressed
 		{
-			string s = vec[counter] ;
+			 s = vec[counter] ;
+			 if((s.compare("..") == 0))
+			 {
+			 	int len = path.length() ;
+			 	for(int i = len-1 ; path[i] != '/'; i--)
+			 		len-- ;
+			 	path.resize(len-1) ;
 
-			strcpy(tempfiln,s.c_str()) ;
-			sprintf(path, "%s/%s", path,tempfiln);    // Path created.
-			stat(path, &me) ;
+			 	len = path.length() ;
+			 	for(int i = len-1 ; path[i] != '/'; i--)
+			 		len-- ;
+
+			 	curdir.assign(path,len,path.length()-len) ;
+
+			 }
+			 else if(s.compare(".") == 0)
+			 	;
+			 else{
+			 	path = path + "/" + vec[counter] ;
+			 	curdir = vec[counter] ;
+			 }
+
+			 strcpy(tempfiln, path.c_str()) ;
+			 stat(tempfiln, &me) ;
 
 			 if((S_ISDIR(me.st_mode)))    //Check for directory.
 				goto label ;
