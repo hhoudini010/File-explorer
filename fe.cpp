@@ -4,6 +4,7 @@
 #include <vector>
 #include <termios.h>
 #include <sys/stat.h>
+#include <stack>
 #include "ls.h"
 
 #define clear() printf("\033[H\033[J") //Clears the screen.
@@ -11,9 +12,13 @@
 
 using namespace std ;
 string path = "/Users/sandeepkumargupta/Desktop" ;
+const string home = "/Users/sandeepkumargupta/Desktop" ;
+const int pathlen = path.length() ;
 
 
-vector <string> vec, forward, backward ; //vec for storing file names in current directory.
+vector <string> vec ; //vec for storing file names in current directory.
+
+stack <string> back, forw ;
 
 
 int main(int argc, char const *argv[])
@@ -54,7 +59,7 @@ int main(int argc, char const *argv[])
 
 	counter = 0 ;
 
-	
+	int flag = 0 ;
 
 
 	printf("\033[%dA", nlines+1);
@@ -62,6 +67,7 @@ int main(int argc, char const *argv[])
 
 	while((c = getchar()) != 'q')		// Quit application on kbhit q ;
 	{
+		 flag = 0 ;
 
 		if(c == '\033')
 		{
@@ -84,15 +90,51 @@ int main(int argc, char const *argv[])
 					counter++ ;
 				}
 			}
+			else if( c == 'C')
+			{
+				if(forw.empty())
+					continue ;
+				else
+				{
+					back.push(path) ;
+					path = forw.top() ;
+					forw.pop() ;
+					flag = 1 ;
+					goto label2 ;
+				}
+			}
+
+			else if(c == 'D')
+			{
+				if(back.empty())
+					continue ;
+				else
+				{
+					forw.push(path) ;
+					path = back.top() ;
+					back.pop() ;
+					flag = 1 ;
+					goto label2 ;
+				}
+			}
 			
 
+		}
+
+		if(c == 'h')
+		{
+			back.push(path) ;
+			path = home ;
+			curdir = "Desktop" ;
+			goto label3 ;
 		}
 
 		if(c == '\n')									//Enter key pressed
 		{
 			 s = vec[counter] ;
-			 if((s.compare("..") == 0))
+			 if((s.compare("..") == 0) && path.length() > pathlen)
 			 {
+			 	back.push(path) ;
 			 	int len = path.length() ;
 			 	for(int i = len-1 ; path[i] != '/'; i--)
 			 		len-- ;
@@ -108,11 +150,23 @@ int main(int argc, char const *argv[])
 			 else if(s.compare(".") == 0)
 			 	;
 			 else{
+			 	if(s.compare("..") != 0){
+			 	back.push(path) ;
 			 	path = path + "/" + vec[counter] ;
 			 	curdir = vec[counter] ;
 			 }
+			 
+			 }
 
-			 strcpy(tempfiln, path.c_str()) ;
+			label2 :if(flag == 1)
+			{
+				int len = path.length() ;
+			 	for(int i = len-1 ; path[i] != '/'; i--)
+			 		len-- ;
+
+			 	curdir.assign(path,len,path.length()-len) ;
+			}
+			label3: strcpy(tempfiln, path.c_str()) ;
 			 stat(tempfiln, &me) ;
 
 			 if((S_ISDIR(me.st_mode)))    //Check for directory.
