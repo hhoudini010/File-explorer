@@ -7,5 +7,6 @@
 #define ls_h
 
 int ls(char[], std::vector <std::string> &vec ) ;
+void curse() ;
 
 #endif

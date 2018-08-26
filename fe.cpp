@@ -22,8 +22,7 @@ vector <string> vec ; //vec for storing file names in current directory.
 
 stack <string> back, forw ;
 
-
-int main(int argc, char const *argv[])
+void curse()
 {
 	
 
@@ -32,7 +31,7 @@ int main(int argc, char const *argv[])
 	int counter = 0 ;  // counter to help in cursor movement.
 
 	string curdir = "Desktop" ; // To print current directory
-	struct termios tio ;
+	
 	
 
 	char tempfiln[7000] ;
@@ -40,15 +39,7 @@ int main(int argc, char const *argv[])
 	chdir(tempfiln) ;
 	char c ;
 
-	tcgetattr(fileno(stdin), &tio) ;	
-
-	tio.c_lflag &= ~ICANON ;
-	tio.c_lflag &= ~ECHO ;
-	tio.c_cc[VMIN] = 1 ;
-	tio.c_cc[VTIME] = 0 ;
-
-	tcsetattr(fileno(stdout), TCSANOW, &tio) ; // Shifting to Non-canonical.
-
+	
 
 	string s ;
 
@@ -203,8 +194,4 @@ int main(int argc, char const *argv[])
 }
 	
 
-
-
-
-	return 0;
 }
