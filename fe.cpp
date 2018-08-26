@@ -4,6 +4,8 @@
 #include <vector>
 #include <termios.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include<unistd.h>
 #include <stack>
 #include "ls.h"
 
@@ -35,6 +37,7 @@ int main(int argc, char const *argv[])
 
 	char tempfiln[7000] ;
 	strcpy(tempfiln,path.c_str()) ;
+	chdir(tempfiln) ;
 	char c ;
 
 	tcgetattr(fileno(stdin), &tio) ;	
@@ -50,7 +53,8 @@ int main(int argc, char const *argv[])
 	string s ;
 
 	label : clear() ;
-	cout<<curdir<<endl ;
+	//cout<<curdir<<endl ;
+	cout<<path<<endl ;
 	nlines = ls(tempfiln, vec) ;
 	struct stat me ;
 	if(nlines != 0){
@@ -121,7 +125,7 @@ int main(int argc, char const *argv[])
 
 		}
 
-		if(c == 'h')
+		else if(c == 'h')
 		{
 			back.push(path) ;
 			path = home ;
@@ -129,7 +133,7 @@ int main(int argc, char const *argv[])
 			goto label3 ;
 		}
 
-		if(c == '\n')									//Enter key pressed
+		else if(c == '\n')									//Enter key pressed
 		{
 			 s = vec[counter] ;
 			 if((s.compare("..") == 0) && path.length() > pathlen)
@@ -150,6 +154,7 @@ int main(int argc, char const *argv[])
 			 else if(s.compare(".") == 0)
 			 	;
 			 else{
+
 			 	if(s.compare("..") != 0){
 			 	back.push(path) ;
 			 	path = path + "/" + vec[counter] ;
@@ -167,10 +172,31 @@ int main(int argc, char const *argv[])
 			 	curdir.assign(path,len,path.length()-len) ;
 			}
 			label3: strcpy(tempfiln, path.c_str()) ;
-			 stat(tempfiln, &me) ;
+			stat(tempfiln, &me) ;
+			chdir(tempfiln) ;
+			 
 
 			 if((S_ISDIR(me.st_mode)))    //Check for directory.
 				goto label ;
+			else
+			{
+				int len = path.length() ;
+				for(int i = len-1 ; path[i] != '/'; i--)
+			 		len-- ;
+			 	path.resize(len-1) ;
+
+				char tempfiln1[500] ;
+				pid_t pid ;
+				 strcpy(tempfiln1, vec[counter].c_str()) ;
+				// ret = chdir(tempfiln1) ;
+				// if(ret == 0){
+				pid = fork();
+				if (pid == 0) 
+  				execl("/usr/bin/open", "open",tempfiln1 , (char *)0);
+
+  				
+				
+			}
 		}
 	}
 	clear() ;
