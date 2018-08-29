@@ -15,30 +15,21 @@
 using namespace std ;
 
 
-vector <string> vec ; //vec for storing file names in current directory.
-
 stack <string> back, forw ;
 
-void curse(char *home1, char *path1)
+void curse(char *home1, char *path1, vector <string> &vec, char *curdir1)
 {
 
 	string path = path1 ;
 	string home = home1 ;
+
 	
 
 	int pathlen = home.length() ;
 	int nlines ;	   // Stores number of files/directories in a directory.
 	int counter = 0 ;  // counter to help in cursor movement.
 
-	string curdir  ; // To print current directory
-
-	{
-		int len = path.length() ;
-	for(int i = len-1 ; path[i] != '/'; i--)
-			len-- ;
-
-	curdir.assign(path,len,path.length()-len) ;
-	}
+	string curdir = curdir1  ; // To print current directory
 
 	
 
@@ -52,8 +43,8 @@ void curse(char *home1, char *path1)
 	string s ;
 
 	//label : clear() ;
-	//cout<<curdir<<endl ;
-	label :cout<<path1<<endl ;
+	label :cout<<curdir<<endl ;
+	//cout<<path1<<endl ;
 	nlines = ls(tempfiln, vec) ;
 	struct stat me ;
 	if(nlines != 0){
@@ -151,6 +142,7 @@ void curse(char *home1, char *path1)
 			 		len-- ;
 
 			 	curdir.assign(path,len,path.length()-len) ;
+			 	strcpy(curdir1,curdir.c_str()) ;
 			 	goto label3 ;
 		}
 
@@ -171,6 +163,7 @@ void curse(char *home1, char *path1)
 			 		len-- ;
 
 			 	curdir.assign(path,len,path.length()-len) ;
+			 	strcpy(curdir1,curdir.c_str()) ;
 
 			 }
 			 else if(s.compare(".") == 0)
@@ -182,6 +175,7 @@ void curse(char *home1, char *path1)
 			 	path = path + "/" + vec[counter] ;
 			 	strcpy(path1,path.c_str()) ;
 			 	curdir = vec[counter] ;
+			 	strcpy(curdir1,curdir.c_str()) ;
 			 }
 			 
 			 }
@@ -193,6 +187,7 @@ void curse(char *home1, char *path1)
 			 		len-- ;
 
 			 	curdir.assign(path,len,path.length()-len) ;
+			 	strcpy(curdir1,curdir.c_str()) ;
 			}
 			label3: strcpy(tempfiln, path.c_str()) ;
 			stat(tempfiln, &me) ;
