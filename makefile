@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -std=c++1z
 DEPS = ls.h
-OBJ = ls.o fe.o main.o
+OBJ = ls.o fe.o create.o main.o
 %.o: %.cpp $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 

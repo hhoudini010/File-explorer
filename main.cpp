@@ -4,14 +4,14 @@
 #include <termios.h>
 #include <unistd.h>
 #include <vector>
-
-
+#include <sstream>
+#include <cstring>
 
 #include "ls.h"
 
 using namespace std ;
 
-#define clear() printf("\033[H\033[J") //Clears the screen.
+#define clearscr() printf("\033[H\033[J") //Clears the screen.
 
 vector <string> vec ; //vec for storing file names in current directory.
 
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
 	
 	struct termios tio ;
 
-	label : clear() ; 
+	label : clearscr() ; 
 
 	tcgetattr(fileno(stdin), &tio) ;	
 
@@ -62,9 +62,11 @@ int main(int argc, char const *argv[])
 
 
 	
-char c, comm_name[50], fname[1000], pname[5000] ;
-vector<char> v ;
+char c ;
 
+string comm_name ;
+
+vector<char> v ;
 
 
 while((c = getchar()) != 'q')
@@ -75,12 +77,45 @@ while((c = getchar()) != 'q')
 	}
 	else if(c=='\n')
 	{
-		clear() ;
+		stringstream coinput ;
+		coinput.str(std::string());
+		coinput.str(string(v.begin(), v.end())) ;
+		coinput>>comm_name ;
+
+		if(comm_name.compare("create_dir") == 0 || comm_name.compare("create_file") == 0)
+		{
+			string fname,dpath ;
+			coinput>>fname ;
+			coinput>>dpath ;
+
+			string hm = home ;
+			char dpath1[5000],fname1[500] ;
+
+			dpath = hm + "/" + dpath ;
+			strcpy(dpath1,dpath.c_str()) ;
+			strcpy(fname1,fname.c_str()) ;
+
+			if(comm_name.compare("create_dir") == 0)
+				cre_dir(fname1,dpath1) ;
+			else
+				create_file(fname1,dpath1) ;
+
+			v.clear() ;
+			
+			getchar() ;
+		}
+
+		
+		
+
+		clearscr() ;
 		cout<<"\033[490A";
 		cout<<curdir<<endl ;
 		ls(path,vec) ;
 		cout<<"\033[490B";
 		cout<<"$" ;
+
+
 	}
 	else
 	{

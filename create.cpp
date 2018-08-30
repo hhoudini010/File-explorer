@@ -2,37 +2,45 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <cstdio>
+#include <cstring>
+ #include <fcntl.h>
+
+
 
 using namespace std ;
 
-void create_dir(char *fname1, char *dpath1)
+void cre_dir(char *fname1, char *dpath1)
 {
 	string fname = fname1 ;
 	string dpath = dpath1 ;
 
-	fname = dpath1 + fname ;
+	char temp1[5000] ;
 
-	strcpy(fname1,c_str()) ;
+	fname = dpath + '/' + fname ;
 
-	mkdir(fname1, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ) ;
+	strcpy(temp1,fname.c_str()) ;
+
+	mkdir(temp1, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ) ;
 }
 
 
 void create_file(char *fname2, char *dpath2)
 {
 
-	chdir(dpath2) ;
 	string fname = fname2 ;
 	string dpath = dpath2 ;
+	char temp[5000] ;
 
-	fname = dpath+fname ;
+	fname = dpath + '/' + fname ;
 
-	strcpy(fname1,c_str()) ;
+	strcpy(temp,fname.c_str()) ;
 
-	chdir()
+	open(temp, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH);
 
-	FILE *fp = fopen(fname1,"w") ;
-	fclose(fp) ;
+	// //chdir()
+
+	// FILE *fp = fopen(fname1,"w") ;
+	// fclose(fp) ;
 
 }
 
