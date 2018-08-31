@@ -178,6 +178,49 @@ while((c = getchar()) != 'q')
 
 		}
 
+		else if((comm_name.compare("delete_file") == 0) || (comm_name.compare("delete_dir") == 0) )
+		{
+			string dpath ;
+			coinput>>dpath ;
+			string hm = home ;
+			dpath = hm + '/' + dpath ;
+			char dpath1[1000] ;
+			strcpy(dpath1,dpath.c_str()) ;
+
+			if(comm_name.compare("delete_file") == 0)
+				remo(dpath1) ;
+			else if((comm_name.compare("delete_dir") == 0))
+				remod(dpath1) ;
+			p.clear() ;
+		}
+
+		else if(comm_name.compare("move") == 0)
+		{
+			vector <string> temp ;
+			string hel ;
+
+			while(coinput>>hel)
+				temp.push_back(hel) ;
+
+			string hm = home ;
+			int len = temp.size() ;
+
+			string dpath = hm + '/' + temp[len-1] ;
+			temp[len-1] = dpath ;
+
+			copy(temp,path) ;
+			getcwd(path,sizeof(path)) ;
+
+			for (int i = 0; i < temp.size()-1 ; ++i)
+			{
+				/* code */
+				remod(temp[i].c_str()) ;
+			}
+
+			p.clear() ;
+
+		}
+
 		
 		
 
