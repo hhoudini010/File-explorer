@@ -221,6 +221,18 @@ while((c = getchar()) != 'q')
 
 		}
 
+		else if(comm_name.compare("rename") == 0 )
+		{
+			string ofn ;
+			string nfn ;
+
+			coinput>>ofn ;
+			coinput>>nfn ;
+
+			rename(ofn.c_str(),nfn.c_str()) ;
+			p.clear() ;
+		}
+
 		
 		
 
