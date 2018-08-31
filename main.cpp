@@ -66,7 +66,8 @@ char c ;
 
 string comm_name ;
 
-vector<char> v ;
+string p ;
+
 
 
 while((c = getchar()) != 'q')
@@ -77,32 +78,69 @@ while((c = getchar()) != 'q')
 	}
 	else if(c=='\n')
 	{
-		stringstream coinput ;
-		coinput.str(std::string());
-		coinput.str(string(v.begin(), v.end())) ;
-		coinput>>comm_name ;
+		string as, df ;
+		
+		//coinput.str(std::string());
+
+		
+
+		stringstream coinput(p) ;
+		 coinput>>comm_name ;
 
 		if(comm_name.compare("create_dir") == 0 || comm_name.compare("create_file") == 0)
 		{
+			
+			cout<<endl ;
 			string fname,dpath ;
 			coinput>>fname ;
 			coinput>>dpath ;
-
+			
+			
 			string hm = home ;
 			char dpath1[5000],fname1[500] ;
 
-			dpath = hm + "/" + dpath ;
+			if(dpath.compare(".") == 0)
+				dpath = hm ;
+			else
+				dpath = hm + "/" + dpath ;
+
 			strcpy(dpath1,dpath.c_str()) ;
 			strcpy(fname1,fname.c_str()) ;
+
+		
 
 			if(comm_name.compare("create_dir") == 0)
 				cre_dir(fname1,dpath1) ;
 			else
 				create_file(fname1,dpath1) ;
 
-			v.clear() ;
+			p.clear() ;
 			
-			getchar() ;
+		}
+
+		else if(comm_name.compare("copy") == 0)
+		{	
+
+			vector <string> temp ;
+			string hel ;
+
+			while(coinput>>hel)
+				temp.push_back(hel) ;
+
+			string hm = home ;
+			int len = temp.size() ;
+
+			string dpath = hm + '/' + temp[len-1] ;
+			temp[len-1] = dpath ;
+
+			// for(int i = 0 ; i < temp.size(); i++)
+			// 	cout<<temp[i]<<endl ;
+
+			copy(temp,path) ;
+			getcwd(path,sizeof(path)) ;
+			p.clear() ;
+
+
 		}
 
 		
@@ -119,7 +157,7 @@ while((c = getchar()) != 'q')
 	}
 	else
 	{
-		v.push_back(c) ;
+		p.push_back(c) ;
 		cout<<c ;
 	}
 	
