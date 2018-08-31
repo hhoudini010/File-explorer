@@ -143,6 +143,41 @@ while((c = getchar()) != 'q')
 
 		}
 
+		else if(comm_name.compare("goto") == 0)
+		{
+			string dpath ;
+			coinput>>dpath ;
+			string path1,hm ;
+			hm = home ;
+			path1 = hm + dpath ;
+
+
+
+			strcpy(path,path1.c_str()) ;
+
+
+			{
+				memset(curdir, 0, sizeof(curdir));
+
+				int len = strlen(path) ;
+				int j = 0 ;
+
+				for(int i = len-1; path[i] != '/' ; i--)
+				{
+					len-- ;
+				}
+
+				for(j = 0 ; len < strlen(path); )
+				{
+					curdir[j++] = path[len++] ;
+				}
+
+			}
+			goto label ;
+
+
+		}
+
 		
 		
 
