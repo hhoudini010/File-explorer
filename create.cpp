@@ -35,7 +35,8 @@ void create_file(char *fname2, char *dpath2)
 
 	strcpy(temp,fname.c_str()) ;
 
-	open(temp, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH);
+	open(temp, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	
 
 	// //chdir()
 

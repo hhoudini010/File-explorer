@@ -100,9 +100,9 @@ while((c = getchar()) != 'q')
 			char dpath1[5000],fname1[500] ;
 
 			if(dpath.compare(".") == 0)
-				dpath = hm ;
+				dpath = path ;
 			else
-				dpath = hm + "/" + dpath ;
+				dpath = hm +  dpath ;
 
 			strcpy(dpath1,dpath.c_str()) ;
 			strcpy(fname1,fname.c_str()) ;
@@ -130,7 +130,7 @@ while((c = getchar()) != 'q')
 			string hm = home ;
 			int len = temp.size() ;
 
-			string dpath = hm + '/' + temp[len-1] ;
+			string dpath = hm +  temp[len-1] ;
 			temp[len-1] = dpath ;
 
 			// for(int i = 0 ; i < temp.size(); i++)
@@ -183,7 +183,7 @@ while((c = getchar()) != 'q')
 			string dpath ;
 			coinput>>dpath ;
 			string hm = home ;
-			dpath = hm + '/' + dpath ;
+			dpath = hm +  dpath ;
 			char dpath1[1000] ;
 			strcpy(dpath1,dpath.c_str()) ;
 
@@ -205,7 +205,7 @@ while((c = getchar()) != 'q')
 			string hm = home ;
 			int len = temp.size() ;
 
-			string dpath = hm + '/' + temp[len-1] ;
+			string dpath = hm + temp[len-1] ;
 			temp[len-1] = dpath ;
 
 			copy(temp,path) ;
@@ -233,6 +233,19 @@ while((c = getchar()) != 'q')
 			p.clear() ;
 		}
 
+		else if(comm_name.compare("snapshot") == 0)
+		{
+			string folder,dumpfile ;
+			coinput>>folder ;
+			coinput>>dumpfile ;
+
+			string temp = path ;
+			temp +=  "/" + folder ;
+
+			snapshot(temp.c_str(),home,dumpfile.c_str()) ;
+			p.clear() ;
+		}
+
 		
 		
 
@@ -252,6 +265,15 @@ while((c = getchar()) != 'q')
 	}
 	
 }
+clearscr() ;
+tcgetattr(fileno(stdin), &tio) ;	
+
+	tio.c_lflag |= ~ICANON ;
+	tio.c_lflag |= ~ECHO ;
+	
+
+tcsetattr(fileno(stdout), TCSANOW, &tio) ;
+
 
 	return 0;
 }

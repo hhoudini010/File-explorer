@@ -13,5 +13,6 @@ void create_file(char *fname2, char *dpath2) ;
 void copy(std::vector <std::string> &temp, char *curdir) ;
 void remo(std::string dpath) ;
 void remod(std::string dpath1) ;
+void snapshot(std::string path, std::string home, std::string dumpfile) ;
 
 #endif

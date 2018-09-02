@@ -59,7 +59,7 @@ void curse(char *home1, char *path1, vector <string> &vec, char *curdir1)
 	printf("\033[%dA", nlines+1);
 
 
-	while((c = getchar()) != 'q')		// Quit application on kbhit q ;
+	while(c = getchar())		// Quit application on kbhit q ;
 	{
 		if(c == ':')
 			return ;
@@ -219,6 +219,11 @@ void curse(char *home1, char *path1, vector <string> &vec, char *curdir1)
   				
 				
 			}
+		}
+		else
+		{
+			clear() ;
+			exit(1) ;
 		}
 	}
 	clear() ;
