@@ -61,8 +61,9 @@ int ls(char bf[], vector<string> &vec)
 
 		cout<<setw(27)<<left<<un->pw_name ;
 		cout<<setw(27)<<left<<gn->gr_name ;
+		string tempo = file->d_name ;
 
-		cout<<setw(27)<<left<<file->d_name ;
+		cout<<setw(27)<<left<<tempo.substr(0,0+25) ;
 		vec.push_back(file->d_name) ;
 		if(siz < 1000)
 			cout<<setw(4)<<right<<siz<<setw(27)<<left<<"B" ;

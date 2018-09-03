@@ -220,7 +220,7 @@ void curse(char *home1, char *path1, vector <string> &vec, char *curdir1)
 				
 			}
 		}
-		else
+		else if (c == 'q')
 		{
 			clear() ;
 			exit(1) ;
